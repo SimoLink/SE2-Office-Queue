@@ -27,3 +27,10 @@ app.use(cors(corsOptions));
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+// GET endpoint to fetch the list of available services
+app.get('/api/services', (req, res) => {
+    res.json(services);
+});
+
+app.post()
