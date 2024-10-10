@@ -5,12 +5,12 @@ export const db = new sqlite.Database('officedb.db', (err) => {
   if (err) throw err;
 });
 
-/*
+
 db.serialize(() => {
   
   // Services Table
   db.run(`
-    CREATE TABLE Services (
+    CREATE TABLE IF NOT EXISTS Services (
       service_name VARCHAR(100) PRIMARY KEY,
       service_time INT NOT NULL
     )
@@ -18,7 +18,7 @@ db.serialize(() => {
   
   // Counter Table
   db.run(`
-    CREATE TABLE Counter (
+    CREATE TABLE IF NOT EXISTS Counter (
       counter_id INT PRIMARY KEY,
       service_name VARCHAR(100),
       FOREIGN KEY (service_name) REFERENCES Services(service_name)
@@ -27,7 +27,7 @@ db.serialize(() => {
 
   // Queue Table
   db.run(`
-    CREATE TABLE Queue (
+    CREATE TABLE IF NOT EXISTS Queue (
       ticket_id INT PRIMARY KEY,
       queue_name VARCHAR(100), -- Links to service_name in Services
       FOREIGN KEY (queue_name) REFERENCES Services(service_name)
@@ -36,7 +36,7 @@ db.serialize(() => {
 
   // History Tickets Table
   db.run(`
-    CREATE TABLE HistoryTickets (
+    CREATE TABLE IF NOT EXISTS HistoryTickets (
       ticket_id INT PRIMARY KEY, -- Unique ticket ID
       service_name VARCHAR(100), -- Links to Services
       counter_id INT, -- Links to Counter
@@ -47,5 +47,16 @@ db.serialize(() => {
     )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS user (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL,
+      name TEXT NOT NULL,
+      hash TEXT NOT NULL,
+      salt TEXT NOT NULL,
+      role VARCHAR(50) NOT NULL
+    )
+  `);
+
 });
-*/
+
