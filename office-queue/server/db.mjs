@@ -28,7 +28,7 @@ db.serialize(() => {
   // Queue Table
   db.run(`
     CREATE TABLE IF NOT EXISTS Queue (
-      ticket_id INT PRIMARY KEY,
+      ticket_id INTEGER PRIMARY KEY,
       queue_name VARCHAR(100), -- Links to service_name in Services
       FOREIGN KEY (queue_name) REFERENCES Services(service_name)
     )
@@ -37,7 +37,7 @@ db.serialize(() => {
   // History Tickets Table
   db.run(`
     CREATE TABLE IF NOT EXISTS HistoryTickets (
-      ticket_id INT AUTO_INCREMENT PRIMARY KEY, -- Unique ticket ID
+      ticket_id INTEGER PRIMARY KEY, -- Unique ticket ID
       service_name VARCHAR(100), -- Links to Services
       counter_id INT, -- Links to Counter
       issued_time TIMESTAMP, -- Time when the ticket was issued
