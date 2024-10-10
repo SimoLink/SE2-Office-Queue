@@ -37,7 +37,7 @@ db.serialize(() => {
   // History Tickets Table
   db.run(`
     CREATE TABLE IF NOT EXISTS HistoryTickets (
-      ticket_id INT PRIMARY KEY, -- Unique ticket ID
+      ticket_id INT AUTO_INCREMENT PRIMARY KEY, -- Unique ticket ID
       service_name VARCHAR(100), -- Links to Services
       counter_id INT, -- Links to Counter
       issued_time TIMESTAMP, -- Time when the ticket was issued
@@ -46,17 +46,5 @@ db.serialize(() => {
       FOREIGN KEY (counter_id) REFERENCES Counter(counter_id)
     )
   `);
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS user (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      email TEXT NOT NULL,
-      name TEXT NOT NULL,
-      hash TEXT NOT NULL,
-      salt TEXT NOT NULL,
-      role VARCHAR(50) NOT NULL
-    )
-  `);
-
 });
 
