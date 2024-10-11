@@ -58,3 +58,12 @@ app.post('/api/historyTickets/create', (req, res) => {
 
  
 });
+
+//NEW
+// GET endpoint to call the next customer in queue
+app.get('/api/nextCustomer', (req, res) => {
+
+  ticketDao.nextCustomer(2).then(res => {    
+    resolve(res);
+  }).catch (err => res.status(500));
+})
