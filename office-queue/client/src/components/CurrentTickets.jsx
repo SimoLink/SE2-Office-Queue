@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import { useState } from "react";
+import {ListGroup} from 'react-bootstrap';
+import {Badge} from 'react-bootstrap';
 
 const mockTickets = [
   {
@@ -42,29 +44,35 @@ const CurrentTickets = () => {
   //     };
 
   return (
-    <div className="w-1/2 h-1/2 bg-slate-800 text-white">
+    <div>
       <h2 className="text-emerald-50">Now Serving</h2>
       {currentTickets.length === 0 ? (
         <p>No tickets are currently being served.</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Ticket Number</th>
-              <th>Service</th>
-              <th>Counter</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentTickets.map((ticket) => (
-              <tr key={ticket.ticket_id}>
-                <td>{ticket.ticket_id}</td>
-                <td>{ticket.service_name}</td>
-                <td>{ticket.counter_id}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ListGroup variant="flush">
+          <ListGroup.Item>Cras justo odio <Badge bg="primary" pill>14</Badge></ListGroup.Item>
+          <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+          <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+          <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+        </ListGroup>
+        // <table>
+        //   <thead>
+        //     <tr>
+        //       <th>Ticket Number</th>
+        //       <th>Service</th>
+        //       <th>Counter</th>
+        //     </tr>
+        //   </thead>
+        //   <tbody>
+        //     {currentTickets.map((ticket) => (
+        //       <tr key={ticket.ticket_id}>
+        //         <td>{ticket.ticket_id}</td>
+        //         <td>{ticket.service_name}</td>
+        //         <td>{ticket.counter_id}</td>
+        //       </tr>
+        //     ))}
+        //   </tbody>
+        // </table>
       )}
     </div>
   );
