@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 const mockTickets = [
@@ -12,13 +12,13 @@ const mockTickets = [
   {
     ticket_id: "2",
     service_name: "Shipping",
-    counter_id: "1",
+    counter_id: "2",
     issued_time: "2024-10-10T09:55:00",
     status: "WAITING",
   },
   {
     ticket_id: "3",
-    service_name: "",
+    service_name: "Transport",
     counter_id: "1",
     issued_time: "2024-10-10T09:55:00",
     status: "WAITING",
@@ -28,7 +28,9 @@ const mockTickets = [
 const CurrentTickets = () => {
   const [currentTickets, setCurrentTickets] = useState([]);
 
-  setCurrentTickets(mockTickets);
+  useEffect(() => {
+    setCurrentTickets(mockTickets);
+  }, [currentTickets]);
 
   //   useEffect(() => {
   //     // Function to fetch current tickets
@@ -40,8 +42,8 @@ const CurrentTickets = () => {
   //     };
 
   return (
-    <div className="w-1/2 h-1/2 bg-slate-800">
-      <h2 className="text-emerald-50">Now Serving</h2>;
+    <div className="w-1/2 h-1/2 bg-slate-800 text-white">
+      <h2 className="text-emerald-50">Now Serving</h2>
       {currentTickets.length === 0 ? (
         <p>No tickets are currently being served.</p>
       ) : (
