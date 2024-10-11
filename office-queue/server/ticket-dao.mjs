@@ -1,39 +1,48 @@
 import { db } from "./db.mjs";
 
-
-export const createTicket = async (service_name) => {
-    const issued_time = new Date().toISOString(); //TimeStamp
+export class TicketDAO {
+  // Metodo per creare un nuovo biglietto
+  async createTicket(service_name) {
+    const issued_time = new Date().toISOString();
     const ticket_status = 'pending';
-    const sqlQuery1 = 'SELECT * FROM Services WHERE service_name= ?';
-    const sqlQuery2 = 'INSERT INTO HistoryTickets (service_name, issued_time , ticket_status) VALUES(?,?,?)';
+    const sqlQuery1 = 'SELECT * FROM Services WHERE service_name = ?';
+    const sqlQuery2 = 'INSERT INTO HistoryTickets (service_name, issued_time, ticket_status) VALUES (?, ?, ?)';
 
+    // Verifica se il servizio esiste
+    const service = await this.findServiceByName(service_name);
+    if (!service) {
+      throw new Error("Service not found");
+    }
 
-    //I check if the service is given by the office
-    const service = await new Promise((resolve, reject) => {
-        db.get(sqlQuery1, [service_name], (err, service) => {
-            if (!service) {
-                const err = "Service not found";
-                reject(err);
-            }
-            else if (err) {
-                reject(err);
-            }
-            else {
-                resolve(service);
-            }
-        });
+    // Inserimento del ticket
+    await this.insertTicket(service_name, issued_time, ticket_status);
+  }
+
+  // Metodo per trovare un servizio dal nome
+  async findServiceByName(service_name) {
+    const sqlQuery = 'SELECT * FROM Services WHERE service_name = ?';
+    return new Promise((resolve, reject) => {
+      db.get(sqlQuery, [service_name], (err, service) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(service);
+        }
+      });
     });
+  }
 
-    //Insert of the ticket
-    const ticket = await new Promise((resolve, reject) => {
-        db.run(sqlQuery2, [service_name, issued_time, ticket_status], (err, ticket) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(ticket);
-            }
-        });
-    })
-};
-
+  // Metodo per inserire un ticket
+  async insertTicket(service_name, issued_time, ticket_status) {
+    const sqlQuery = 'INSERT INTO HistoryTickets (service_name, issued_time, ticket_status) VALUES (?, ?, ?)';
+    return new Promise((resolve, reject) => {
+      db.run(sqlQuery, [service_name, issued_time, ticket_status], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+}

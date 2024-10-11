@@ -1,6 +1,6 @@
 // imports
 import './db.mjs'
-import { createTicket } from './ticket-dao.mjs';
+import { TicketDAO } from './ticket-dao.mjs';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
