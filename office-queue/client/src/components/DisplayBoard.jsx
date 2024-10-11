@@ -1,4 +1,6 @@
-import { CurrentTickets } from "./CurrentTickets";
+/* eslint-disable no-unused-vars */
+import React from "react";
+import CurrentTickets from "./CurrentTickets";
 
 const DisplayBoard = () => {
   return (
