@@ -1,9 +1,9 @@
 import {db} from "./db.mjs" 
 
 // Function to get all services
-export default function ServicesDAO() {
+export class ServicesDAO {
     
-    this.getServices = () => {
+    async getServices() {
         return new Promise((resolve, reject) => {
           const query = 'SELECT * FROM services';
           db.all(query, [], (err, rows) => {
@@ -17,7 +17,7 @@ export default function ServicesDAO() {
       };
       
       // Function to get a service by ID
-      this.getServiceById = (service_name) => {
+      async getServiceById(service_name) {
         return new Promise((resolve, reject) => {
           const query = 'SELECT * FROM services WHERE service_name = ?';
           db.get(query, [service_name], (err, row) => {
@@ -31,7 +31,7 @@ export default function ServicesDAO() {
       };
       
       // Function to get a service by name
-      this.getServiceByName = (service_name) => {
+      async getServiceByName(service_name) {
         return new Promise((resolve, reject) => {
           const query = 'SELECT * FROM services WHERE service_name = ?';
           db.get(query, [service_name], (err, row) => {
@@ -69,3 +69,4 @@ function updateService(service_id, service_name, service_time, callback) {
     });
 }*/
 }
+export default ServicesDAO;
