@@ -50,3 +50,19 @@ export const getUserById = (id) => {
     });
   });
 };
+
+// Function to insert a new user
+const insertUser = async (email, name, password, role) => {
+  const { hash, salt } = await hashPassword(password);
+
+  const sql = `INSERT INTO user (email, name, hash, salt, role) VALUES (?, ?, ?, ?, ?)`;
+  
+  db.run(sql, [email, name, hash, salt, role], function(err) {
+    if (err) {
+      console.error(err.message);
+      return;
+    }
+    console.log(`User inserted with ID: ${this.lastID}`);
+  });
+};
+
