@@ -58,3 +58,31 @@ app.post('/api/historyTickets/create', (req, res) => {
 
  
 });
+
+// GET endpoint to call the next customer in queue
+app.get('/api/nextCustomer/:counterId', (req, res) => {
+
+  const counterId = parseInt(req.params.counterId);
+
+  ticketDao.nextCustomer(counterId)
+    .then(result => {
+      if (result !== undefined) {
+        console.log(result);
+        return res.status(201).json({
+          message: `Next customer with ticket id ${result} successfully called`,
+          data: result
+        });
+      } else {        
+        return res.status(200).json({
+          message: 'Zero customers in queue.',
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({
+        error: 'Error while processing the request',
+        details: err
+      });
+    });
+});

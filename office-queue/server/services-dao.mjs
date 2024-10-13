@@ -44,6 +44,65 @@ export class ServicesDAO {
         });
       };
 
+      // Function to get a service by name
+      async getServiceTime (service_name) {
+      return new Promise((resolve, reject) => {
+          const query = 'SELECT service_time FROM services WHERE service_name = ?';
+          db.get(query, [service_name], (err, row) => {
+          if (err) {
+              reject(err); // Rigetta la Promise in caso di errore
+          } else {
+              resolve(row.service_time); // Risolvi la Promise con il risultato (row)
+          }
+          });
+      });
+  };
+
+  async getNumberInQueue (service_name) {
+      return new Promise((resolve, reject) => {
+          const query = 'SELECT COUNT(*) AS num FROM Queue WHERE queue_name = ?';
+          db.get(query, [service_name], (err, row) => {
+          if (err) {
+              reject(err); // Rigetta la Promise in caso di errore
+          } else {
+            console.log('getNumberInQueue ', row.num);
+
+              resolve(row.num); // Risolvi la Promise con il risultato (row)
+          }
+          });
+      });
+  };
+
+  async getCounterForService(service_name){
+    return new Promise((resolve, reject) => {
+    const query = 'SELECT COUNT(*) AS num FROM Counter WHERE service_name = ?';
+    db.get(query, [service_name], (err, row) => {
+    if (err) {
+        reject(err); // Rigetta la Promise in caso di errore
+    } else {
+        console.log('getCounterForService ', row.num);
+        
+        resolve(row.num); // Risolvi la Promise con il risultato (row)
+    }
+    });
+});
+  }
+  async getKi(service_name) {
+      return new Promise((resolve, reject) => {
+          const query = 'SELECT counter_id, COUNT(service_name) AS total_services FROM Counter WHERE counter_id IN (SELECT counter_id FROM Counter WHERE service_name = ?) GROUP BY counter_id';
+          db.all(query, [service_name], (err, row) => {
+          if (err) {
+              reject(err); // Rigetta la Promise in caso di errore
+          } else {
+              console.log('getCounterForService ', row);
+              
+              resolve(row); // Risolvi la Promise con il risultato (row)
+          }
+          });
+      });
+  };
+
+
 // Function to add a new service
 /*function addService(service_name, service_time, callback) {
     const query = 'INSERT INTO services (service_name, service_time) VALUES (?, ?)';
