@@ -6,6 +6,7 @@ import cors from 'cors';
 import session from 'express-session';
 import TicketDAO from './ticket-dao.mjs';
 import ServicesDAO from './services-dao.mjs'
+import StatsDAO from './stats-dao.mjs';
 
 
 // init express
@@ -14,6 +15,8 @@ const port = 3001;
 
 const ticketDao = new TicketDAO();
 const servicesDao = new ServicesDAO();
+const statsDao = new StatsDAO();
+
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -75,6 +78,38 @@ app.get('/api/nextCustomer/:counterId', (req, res) => {
       } else {        
         return res.status(200).json({
           message: 'Zero customers in queue.',
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({
+        error: 'Error while processing the request',
+        details: err
+      });
+    });
+});
+
+// GET endpoint to view how many customers each counter has served, further divided by service type.
+app.get('/api/statsCounter/:period/:date', (req, res) => {
+  const period = req.params.period;
+  const date = req.params.date;
+
+  const counterIds = req.query.counter_id ? req.query.counter_id.split(',').map(Number) : []; 
+
+  const serviceNames = req.query.service_name ? req.query.service_name.split(',') : [];
+
+  statsDao.getCounterServiceStats(period, date, counterIds, serviceNames)
+    .then(result => {
+      if (result !== undefined && result.length > 0) {
+        console.log(result);
+        return res.status(200).json({
+          message: `Stats per ${period} successfully fetched`,
+          data: result
+        });
+      } else {
+        return res.status(200).json({
+          message: 'No stats',
         });
       }
     })
