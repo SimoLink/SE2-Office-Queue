@@ -5,7 +5,6 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import session from 'express-session';
-import TicketDAO from './ticket-dao.mjs';
 import ServicesDAO from './services-dao.mjs'
 
 
