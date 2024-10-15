@@ -135,15 +135,21 @@ app.get('/api/counters/:counter_id/services', (req, res) => {
 });
 
 // GET endpoint to get counters by service ID
-app.get('/api/services/:service_id/counters', (req, res) => {
-  const service_id = parseInt(req.params.service_id);
+app.get('/api/services/:service_name/counters', (req, res) => {
+  const service_name = req.params.service_name;  // Ottieni service_name come stringa dall'URL
 
-  if (!service_id) {
-      return res.status(400).json({ message: 'Invalid service ID' });
+  if (!service_name) {
+      return res.status(400).json({ message: 'Invalid service name' });
   }
-  counterDao.getCountersByService(service_id).then(counters => res.json(counters))
-  .catch(err => res.status(500).json({ message:'Error fetching counters for service', error: err.message }));
 
+  counterDao.getCountersByService(service_name)
+    .then(counters => {
+        if (counters.length === 0) {
+            return res.status(404).json({ message: `No counters found for service: ${service_name}` });
+        }
+        res.json(counters);  // Restituisce la lista degli ID dei counters
+    })
+    .catch(err => res.status(500).json({ message: 'Error fetching counters for service', error: err.message }));
 });
 
 // GET endpoint to get the total number of counters
