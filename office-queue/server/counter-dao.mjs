@@ -2,8 +2,20 @@ import { db } from "./db.mjs";
 
 export class CounterDAO {
     async addService(counter_id,service_name) {
+        const checkServiceQuery = 'SELECT * FROM Services WHERE service_name = ?';
         const sqlQuery1 = 'INSERT INTO Counter (counter_id, service_name) VALUES (?, ?)';
-        // I can implement a service_name check here
+
+        const serviceExists = await new Promise((resolve, reject) => {
+            db.get(checkServiceQuery, [service_name], (err, row) => {
+                if (err) {
+                    reject(err);  
+                } else if (!row) {
+                    reject(new Error('Service name does not exist in Services table.'));  // Servizio non trovato
+                } else {
+                    resolve(true);  
+                }
+            });
+        });
 
         const counter = await new Promise((resolve, reject) => {
             db.run(sqlQuery1, [counter_id, service_name], (err) => {
@@ -24,10 +36,12 @@ export class CounterDAO {
     async removeService(counter_id,service_name) {
         const sqlQuery2 = "DELETE FROM Counter WHERE counter_id=? AND service_name=?";
         const counter = await new Promise((resolve,reject) => {
-            db.run(sqlQuery2,[counter_id,service_name],(err) => {
+            db.run(sqlQuery2,[counter_id,service_name],function (err) {
                 if(err){
                     reject(err);
-                } else{
+                } else if (this.changes === 0){
+                    reject(new Error('Combination of counter_id and service_name not found.'));
+                }  else{
                     resolve({
                         counter_id,
                         service_name
