@@ -46,21 +46,9 @@ export class TicketDAO {
 
   //NEW
   async nextCustomer(counter_id) {
-    const sqlQuery1 = 'SELECT * FROM Counter WHERE counter_id = ?';
 
-    const serviceList = await new Promise((resolve, reject) => {
-      db.all(sqlQuery1, [counter_id], (err, res) => {
-        if (!res) {
-          const err = "Service not found";
-          reject(err);
-        } else if (err) {
-          reject(err);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-
+    const serviceList = await servicesDao.getServiceList(counter_id);
+    
     const times = new Map();
 
     for (const service of serviceList) {

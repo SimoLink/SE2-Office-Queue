@@ -102,6 +102,23 @@ export class ServicesDAO {
       });
   };
 
+  async getServiceList(counter_id){
+    return new Promise((resolve, reject) => {
+      const sqlQuery1 = 'SELECT * FROM Counter WHERE counter_id = ?';
+
+      db.all(sqlQuery1, [counter_id], (err, res) => {
+        if (!res) {
+          const err = "Service not found";
+          reject(err);
+        } else if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+
+  }
 
 // Function to add a new service
 /*function addService(service_name, service_time, callback) {
