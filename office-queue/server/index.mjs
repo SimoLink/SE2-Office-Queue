@@ -7,11 +7,7 @@ import cors from 'cors';
 import session from 'express-session';
 import ServicesDAO from './services-dao.mjs'
 import CounterDAO from './counter-dao.mjs';
-
 import TicketDAO from './ticket-dao.mjs';
-
-import ServicesDAO from './services-dao.mjs'
-import CounterDAO from './counter-dao.mjs'
 
 
 // init express
