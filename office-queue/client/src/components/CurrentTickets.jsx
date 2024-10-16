@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import API from "../services/API";
 
-const CurrentTickets = () => {
+const CurrentTickets = ({ tickets }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [tickets, setTickets] = useState([]);
 
   // Showing the current time "HH:MM"
   useEffect(() => {
@@ -14,17 +14,6 @@ const CurrentTickets = () => {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const fetchAllTickets = async () => {
-      try {
-        const data = await API.fetchAllTickets();
-        setTickets(data);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      }
-    };
-    fetchAllTickets();
-  }, []);
   return (
     <div className="bg-slate-800 text-white px-5 py-4 font-sans rounded-md w-full ">
       <div className="flex justify-between items-center mb-4">
