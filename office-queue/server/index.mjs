@@ -115,7 +115,7 @@ app.post('/api/counters/add', (req, res) => {
       return res.status(400).json({ message: 'Counter ID and Service ID are required' });
   }
 
-  counterDao.addService(counter_id, service_id) //TO DO - CORRECT DAO NAMES
+  counterDao.addService(counter_id, service_id) 
   .then(result => res.json(result))
   .catch(err => res.status(500).json({ message: 'Error assigning service to counter', error: err.message }));
   });
@@ -123,13 +123,13 @@ app.post('/api/counters/add', (req, res) => {
 
 // DELETE endpoint to remove a service from a counter
 app.delete('/api/counters/delete', (req, res) => {
-  const { counter_id, service_id } = req.body;
+  const { counter_id, service_name } = req.body;
 
-  if (!counter_id || !service_id) {
+  if (!counter_id || !service_name) {
       return res.status(400).json({ message: 'Counter ID and Service ID are required' });
   }
 
-  counterDao.removeService(counter_id, service_id).then(result => res.json(result))
+  counterDao.removeService(counter_id, service_name).then(result => res.json(result))
   .catch(err => res.status(500).json({ message: 'Error removing service from counter', error: err.message }));
    
   
