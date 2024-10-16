@@ -61,6 +61,7 @@ export class TicketDAO {
     const ticket_status = 'pending';
     const sqlQuery1 = 'SELECT * FROM Services WHERE service_name = ?';
     const sqlQuery2 = 'INSERT INTO HistoryTickets (service_name, issued_time, ticket_status) VALUES (?, ?, ?)';
+    const sqlQuery3 = 'INSERT INTO Queue (ticket_id, queue_name) VALUES (?, ?)';
 
     // Controllo se il servizio è fornito dall'ufficio
     const service = await new Promise((resolve, reject) => {
@@ -79,6 +80,21 @@ export class TicketDAO {
     // Inserimento del ticket
     const ticket = await new Promise((resolve, reject) => {
       db.run(sqlQuery2, [service_name, issued_time, ticket_status], function(err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({
+            ticket_id: this.lastID,
+            service_name,
+            issued_time,
+            ticket_status,
+          });
+        }
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      db.run(sqlQuery3, [ticket.ticket_id, service_name], function(err) {
         if (err) {
           reject(err);
         } else {
@@ -217,10 +233,11 @@ export class TicketDAO {
 
       console.log(`Ticket with ID ${selectedTicket} deleted successfully.`);
 
-      const sqlQuery5 = 'UPDATE HistoryTickets SET ticket_status = ? WHERE ticket_id = ?';
+      // const sqlQuery5 = 'UPDATE HistoryTickets SET ticket_status = ? WHERE ticket_id = ?';
+      const sqlQuery5 = 'UPDATE HistoryTickets SET ticket_status = ? , counter_id = ? WHERE ticket_id = ?';
 
       await new Promise((resolve, reject) => {
-        db.run(sqlQuery5, ['served', selectedTicket], (err, res) => {
+        db.run(sqlQuery5, ['served', counter_id, selectedTicket], (err, res) => {
           if (err) {
             reject(err);
           } else {

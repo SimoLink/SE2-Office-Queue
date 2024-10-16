@@ -53,6 +53,7 @@ async function fetchAllTickets() {
   return tickets;
 }
 
+
 //counters APIS
 
 
@@ -154,15 +155,45 @@ async function fetchTotalCounters() {
 
 
 
+async function fetchStats(period, date, counters = "", serviceNames = ""){
+  try {
+    const queryParams = new URLSearchParams({
+      counter_id: counters,
+      service_name: serviceNames,
+    });
+    console.log(period, date);
+    
+    const response = await fetch(SERVER_URL + `/api/statsCounter/${period}/${date}?${queryParams}`);
+    
+    if (!response.ok) {
+      throw new Error("Error fetching statistics");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    
+    return data;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
 const API = {
   fetchServices,
   getTicket,
   fetchAllTickets,
+
   addServiceToCounter,
   removeServiceFromCounter,
   fetchServicesByCounter,
   fetchCountersByService,
-  fetchTotalCounters
+  fetchTotalCounters,
+
+  fetchStats
+
 };
 
 export default API;

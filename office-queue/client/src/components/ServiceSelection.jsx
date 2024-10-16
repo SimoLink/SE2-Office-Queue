@@ -1,50 +1,52 @@
-import React, { useState, useEffect } from "react";
-import API from "../services/API";  
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
+import API from "../services/API";
 
-const ServiceSelection = () => {
-  const [selectedService, setSelectedService] = useState("");  
-  const [ticketNumber, setTicketNumber] = useState(null);     
-  const [services, setServices] = useState([]);               
-  const [ticketGenerated, setTicketGenerated] = useState(false); 
+const ServiceSelection = ({ onTicketGenerated }) => {
+  const [selectedService, setSelectedService] = useState("");
+  const [ticketNumber, setTicketNumber] = useState(null);
+  const [services, setServices] = useState([]);
+  const [ticketGenerated, setTicketGenerated] = useState(false);
 
   // New state to control the visibility of the ticket details
-  const [showTicket, setShowTicket] = useState(false); 
+  const [showTicket, setShowTicket] = useState(false);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const data = await API.fetchServices(); 
-        setServices(data); 
+        const data = await API.fetchServices();
+        setServices(data);
       } catch (error) {
         console.error("Error fetching services:", error);
       }
     };
 
-    fetchServices();  
+    fetchServices();
   }, []);
 
   const handleServiceSelect = (event) => {
-    setSelectedService(event.target.value);  
+    setSelectedService(event.target.value);
   };
 
   const handleGenerateTicket = async () => {
     if (selectedService) {
       try {
-        const ticket = await API.getTicket(selectedService);  
-        setTicketNumber(ticket.ticket.ticket_id);          
-        setTicketGenerated(true);                             
-        setShowTicket(true);  // Show the ticket details
+        const ticket = await API.getTicket(selectedService);
+        setTicketNumber(ticket.ticket.ticket_id);
+        setTicketGenerated(true);
+        setShowTicket(true); // Show the ticket details
+        onTicketGenerated();
       } catch (error) {
         console.error("Error generating ticket:", error);
       }
     } else {
-      alert("Please select a service.");  
+      alert("Please select a service.");
     }
   };
 
   // Handler to close the ticket details
   const handleCloseTicket = () => {
-    setShowTicket(false);  // Hide the ticket details
+    setShowTicket(false); // Hide the ticket details
     setTicketGenerated(false); // Optionally reset the generated state
   };
 
@@ -89,7 +91,8 @@ const ServiceSelection = () => {
           </button>
           <h3 className="text-xl font-bold mb-2">Ticket Generated</h3>
           <p className="text-lg">Service: {selectedService}</p>
-          <p className="text-lg">Ticket Number: {ticketNumber}</p>  {/* Ticket Number */}
+          <p className="text-lg">Ticket Number: {ticketNumber}</p>{" "}
+          {/* Ticket Number */}
         </div>
       )}
     </div>
