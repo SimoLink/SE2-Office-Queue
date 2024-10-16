@@ -1,17 +1,17 @@
-const SERVER_URL = 'http://localhost:3001';
+const SERVER_URL = "http://localhost:3001";
 
 // Funzione per ottenere i servizi dal server
 async function fetchServices() {
-  const response = await fetch(SERVER_URL + '/api/services', {
-    method: 'GET',
+  const response = await fetch(SERVER_URL + "/api/services", {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include', // Se necessario per la sessione
+    credentials: "include", // Se necessario per la sessione
   });
 
   if (!response.ok) {
-    throw new Error('Errore API fetchServices');
+    throw new Error("Errore API fetchServices");
   }
 
   const services = await response.json();
@@ -19,34 +19,34 @@ async function fetchServices() {
 }
 
 async function getTicket(service_name) {
-  const response = await fetch(SERVER_URL + '/api/historyTickets/create', {
-    method: 'POST',
+  const response = await fetch(SERVER_URL + "/api/historyTickets/create", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include', 
-    body: JSON.stringify({ service_name }), 
+    credentials: "include",
+    body: JSON.stringify({ service_name }),
   });
 
   if (!response.ok) {
-    throw new Error('Errore API getTicket');
+    throw new Error("Errore API getTicket");
   }
 
   const ticket = await response.json();
-  return ticket; 
+  return ticket;
 }
 
 async function fetchAllTickets() {
-  const response = await fetch(SERVER_URL + '/api/historyTickets/all', {
-    method: 'GET',
+  const response = await fetch(SERVER_URL + "/api/historyTickets/all", {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    credentials: 'include', // Se necessario per la sessione
+    credentials: "include",
   });
 
   if (!response.ok) {
-    throw new Error('Errore API fetchAllTickets');
+    throw new Error("Errore API fetchAllTickets");
   }
 
   const tickets = await response.json();
@@ -55,7 +55,7 @@ async function fetchAllTickets() {
 
 const API = {
   fetchServices,
-  getTicket,  
+  getTicket,
   fetchAllTickets,
 };
 
