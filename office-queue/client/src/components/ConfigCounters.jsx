@@ -120,7 +120,7 @@ const ConfigCounters = () => {
 
       </div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl" >Seleziona il counter per assegnare  iservizi scelti</h2>
+        <h2 className="text-2xl" >Select the counter you want to assign the services</h2>
 
       </div>
       {/* Tabella Counters */}
@@ -158,9 +158,9 @@ const ConfigCounters = () => {
         </div>
       ))}
 
-      {/* Tabella Servizi per assegnare ai counters */}
+      {/* Tab services to assign counters */}
       <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-4">Servizi disponibili</h2>
+        <h2 className="text-xl font-semibold mb-4">Available services</h2>
 
         <div className="grid grid-cols-5 gap-4 mb-2">
           {services.map((service_name) => (
@@ -182,8 +182,8 @@ const ConfigCounters = () => {
           onClick={assignServicesToCounter}
           disabled={!selectedCounter || selectedServices.length === 0}
         >
-          Assegna Servizi al Counter
-        </button>
+          Assign services to Counters
+                  </button>
       </div>
     </div>
   );
