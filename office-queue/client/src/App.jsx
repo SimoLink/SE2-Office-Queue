@@ -2,12 +2,13 @@
 
 import React from "react";
 import "./App.css";
-import DisplayBoard from "./components/DisplayBoard";
+import MainPage from "./components/MainPage";
 
 function App() {
   return (
     <>
-      <DisplayBoard />
+      <MainPage />
+      
     </>
   );
 }
