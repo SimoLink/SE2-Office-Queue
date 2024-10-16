@@ -54,11 +54,12 @@ export class TicketDAO {
 
     // Inserimento del ticket
     const ticket = await new Promise((resolve, reject) => {
-      db.run(sqlQuery2, [service_name, issued_time, ticket_status], (err) => {
+      db.run(sqlQuery2, [service_name, issued_time, ticket_status], function(err) {
         if (err) {
           reject(err);
         } else {
           resolve({
+            ticket_id: this.lastID,
             service_name,
             issued_time,
             ticket_status,

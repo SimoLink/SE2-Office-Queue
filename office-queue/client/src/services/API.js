@@ -18,9 +18,27 @@ async function fetchServices() {
   return services;
 }
 
+async function getTicket(service_name) {
+  const response = await fetch(SERVER_URL + '/api/historyTickets/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include', 
+    body: JSON.stringify({ service_name }), 
+  });
+
+  if (!response.ok) {
+    throw new Error('Errore API getTicket');
+  }
+
+  const ticket = await response.json();
+  return ticket; 
+}
+
 const API = {
-    fetchServices,  
-  };
+  fetchServices,
+  getTicket,  
+};
 
 export default API;
-  
