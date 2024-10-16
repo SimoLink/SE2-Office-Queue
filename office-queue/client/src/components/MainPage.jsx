@@ -4,6 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import DisplayBoard from "./DisplayBoard";
+import StatisticBoard from "./StatisticBoard";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,6 +53,7 @@ export default function MainPage() {
           <Tab label="Customer" {...a11yProps(0)} />
           <Tab label="Officer" {...a11yProps(1)} />
           <Tab label="Administrator" {...a11yProps(2)} />
+          <Tab label="Manager" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -62,6 +64,9 @@ export default function MainPage() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         Administrator
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <StatisticBoard/>
       </CustomTabPanel>
     </Box>
   );
