@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import API from "../services/API";
 
 const ServiceSelection = () => {
     const [selectedService, setSelectedService] = useState("");
@@ -9,16 +10,11 @@ const ServiceSelection = () => {
     const [loading, setLoading] = useState(true); 
 
     // Fetch services from the API when the component mounts
-    useEffect(() => {
+      useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await fetch('http://localhost:3001/api/services'); 
-                if (response.ok) {
-                    const data = await response.json();
-                    setServices(data); // Update services with the fetched data
-                } else {
-                    console.error("Failed to fetch services");
-                }
+                const data = await API.fetchServices();  // Usa l'API centralizzata
+                setServices(data); // Update services with the fetched data
             } catch (error) {
                 console.error("Error fetching services:", error);
             } finally {
