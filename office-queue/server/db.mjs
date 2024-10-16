@@ -19,8 +19,9 @@ db.serialize(() => {
   // Counter Table
   db.run(`
     CREATE TABLE IF NOT EXISTS Counter (
-      counter_id INT PRIMARY KEY,
+      counter_id INT,
       service_name VARCHAR(100),
+      PRIMARY KEY (counter_id, service_name),
       FOREIGN KEY (service_name) REFERENCES Services(service_name)
     )
   `);

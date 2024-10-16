@@ -1,21 +1,25 @@
 // imports
 import './db.mjs'
+//import { TicketDAO } from './ticket-dao.mjs';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import session from 'express-session';
-import TicketDAO from './ticket-dao.mjs';
 import ServicesDAO from './services-dao.mjs'
 import StatsDAO from './stats-dao.mjs';
 import evaluateWaitingTime from './util.mjs';
+import CounterDAO from './counter-dao.mjs';
+import TicketDAO from './ticket-dao.mjs';
 
 // init express
 const app = new express();
 const port = 3001;
-
+const counters_N=5;
 const ticketDao = new TicketDAO();
 const servicesDao = new ServicesDAO();
 const statsDao = new StatsDAO();
+
+const counterDao = new CounterDAO();
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -88,6 +92,74 @@ app.get('/api/nextCustomer/:counterId', (req, res) => {
         details: err
       });
     });
+});
+
+
+//-------------------------------
+
+// POST endpoint to assign a service to a counter
+app.post('/api/counters/add', (req, res) => {
+  const { counter_id, service_id } = req.body;
+
+  if (!counter_id || !service_id) {
+      return res.status(400).json({ message: 'Counter ID and Service ID are required' });
+  }
+
+  counterDao.addService(counter_id, service_id) //TO DO - CORRECT DAO NAMES
+  .then(result => res.json(result))
+  .catch(err => res.status(500).json({ message: 'Error assigning service to counter', error: err.message }));
+  });
+
+
+// DELETE endpoint to remove a service from a counter
+app.delete('/api/counters/delete', (req, res) => {
+  const { counter_id, service_id } = req.body;
+
+  if (!counter_id || !service_id) {
+      return res.status(400).json({ message: 'Counter ID and Service ID are required' });
+  }
+
+  counterDao.removeService(counter_id, service_id).then(result => res.json(result))
+  .catch(err => res.status(500).json({ message: 'Error removing service from counter', error: err.message }));
+   
+  
+});
+
+// GET endpoint to get services by counter ID
+app.get('/api/counters/:counter_id/services', (req, res) => {
+  const counter_id = parseInt(req.params.counter_id);
+
+  if (!counter_id) {
+      return res.status(400).json({ message: 'Invalid counter ID' });
+  }
+  counterDao.getServicesByCounter(counter_id).then(services => res.json(services))
+  .catch(err => res.status(500).json({ message: 'Error fetching services for counter', error: err.message }));
+
+});
+
+// GET endpoint to get counters by service ID
+app.get('/api/services/:service_name/counters', (req, res) => {
+  const service_name = req.params.service_name;  // Ottieni service_name come stringa dall'URL
+
+  if (!service_name) {
+      return res.status(400).json({ message: 'Invalid service name' });
+  }
+
+  counterDao.getCountersByService(service_name)
+    .then(counters => {
+        if (counters.length === 0) {
+            return res.status(404).json({ message: `No counters found for service: ${service_name}` });
+        }
+        res.json(counters);  // Restituisce la lista degli ID dei counters
+    })
+    .catch(err => res.status(500).json({ message: 'Error fetching counters for service', error: err.message }));
+});
+
+// GET endpoint to get the total number of counters
+app.get('/api/counters/number', (req, res) => {
+ 
+      res.json({ counters_N });
+ 
 });
 
 // GET endpoint to view how many customers each counter has served, further divided by service type.
