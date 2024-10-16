@@ -116,9 +116,13 @@ const ConfigCounters = () => {
   return (
     <div className="bg-slate-800 text-white px-5 py-4 font-sans rounded-md w-full">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Counters</h1>
-      </div>
+        <h1 className="text-2xl font-bold">Counters</h1> 
 
+      </div>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl" >Seleziona il counter per assegnare  iservizi scelti</h2>
+
+      </div>
       {/* Tabella Counters */}
       <div className="grid grid-cols-5 gap-4 font-semibold mb-2">
         <span>Counters</span>

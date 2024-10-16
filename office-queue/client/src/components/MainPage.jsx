@@ -61,7 +61,6 @@ export default function MainPage() {
         Officer
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        Administrator
         <ConfigCounters/>
       </CustomTabPanel>
     </Box>
