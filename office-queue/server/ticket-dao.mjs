@@ -6,6 +6,30 @@ const servicesDao = new ServicesDAO();
 
 export class TicketDAO {
 
+  async getAllTickets() {
+
+    const sqlQuery0 = `
+      SELECT * FROM HistoryTickets
+      WHERE ticket_status = "pending"
+    `;
+
+    const tickets = await new Promise((resolve, reject) => {
+      db.all(sqlQuery0, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    if (tickets.length > 0) {
+      return tickets;
+    } else {
+      return [];
+    }
+  }
+
   async getTodayTickets() {
     const today = new Date().toISOString().split('T')[0]; 
 
