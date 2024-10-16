@@ -5,6 +5,32 @@ import evaluateWaitingTime from "./util.mjs";
 const servicesDao = new ServicesDAO();
 
 export class TicketDAO {
+
+  async getTodayTickets() {
+    const today = new Date().toISOString().split('T')[0]; 
+
+    const sqlQuery = `
+      SELECT * FROM HistoryTickets
+      WHERE DATE(issued_time) = ?
+    `;
+
+    const tickets = await new Promise((resolve, reject) => {
+      db.all(sqlQuery, [today], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    if (tickets.length > 0) {
+      return tickets;
+    } else {
+      return [];
+    }
+  }
+
   // Metodo per creare un ticket
   async createTicket(service_name) {
     const issued_time = new Date().toISOString(); //TimeStamp
@@ -200,4 +226,6 @@ export class TicketDAO {
   }
 
 }
+
+
 export default TicketDAO;
