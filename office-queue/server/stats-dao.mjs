@@ -30,14 +30,17 @@ export class StatsDAO {
           params = [date, endDate];  
           break;
 
-        case 'month':
-          sqlQuery = `
-            SELECT counter_id, service_name, COUNT(*) AS total_served
-            FROM HistoryTickets
-            WHERE ticket_status = 'served'
-            AND strftime('%Y-%m', issued_time) = ?
-          `;
-          break;
+          case 'month':
+            const monthDate = dayjs(date).format('YYYY-MM');  // Format the date as 'YYYY-MM'
+            sqlQuery = `
+              SELECT counter_id, service_name, COUNT(*) AS total_served
+              FROM HistoryTickets
+              WHERE ticket_status = 'served'
+              AND strftime('%Y-%m', issued_time) = ?
+            `;
+            params = [monthDate];  // Pass the formatted month date
+            break;
+  
 
         default:
           throw new Error('Invalid period specified');
