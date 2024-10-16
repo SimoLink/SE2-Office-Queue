@@ -1,12 +1,12 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "/src/services/API.js";  // Importa la funzione dal file API.js
 
 const StatisticBoard = () => {
   const [period, setPeriod] = useState("day");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);  // Default to today
-  const [counters, setCounters] = useState("");
-  const [serviceNames, setServiceNames] = useState("");
+  const [counters, setCounters] = useState([]); // Modificato per essere un array
+  const [availableServices, setAvailableServices] = useState([]); // Stato per i servizi disponibili
+  const [selectedServices, setSelectedServices] = useState([]);   // Stato per i servizi selezionati
   const [stats, setStats] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -14,7 +14,9 @@ const StatisticBoard = () => {
   const loadStats = async () => {
     if (date) {
       try {
-        const data = await API.fetchStats(period, date, counters, serviceNames);
+        const serviceNames = selectedServices.join(","); // Trasformare i servizi selezionati in stringa separata da virgole
+        const counterIDs = counters.join(","); // Trasformare i counter selezionati in stringa
+        const data = await API.fetchStats(period, date, counterIDs, serviceNames);
         
         if (data.data) {
           setStats(data.data);
@@ -29,6 +31,48 @@ const StatisticBoard = () => {
       }
     }
   };
+
+  // Funzione per caricare i servizi disponibili dall'API
+  const loadServices = async () => {
+    try {
+      const services = await API.fetchServices(); // Usa la funzione che chiama l'API per ottenere i servizi
+      setAvailableServices(services);
+    } catch (error) {
+      setErrorMessage("Error fetching services.");
+      console.error(error);
+    }
+  };
+
+  // Funzione per gestire la selezione/deselezione di un servizio
+  const toggleServiceSelection = (service) => {
+    setSelectedServices((prevSelectedServices) => {
+      if (prevSelectedServices.includes(service)) {
+        // Se il servizio è già selezionato, lo rimuoviamo
+        return prevSelectedServices.filter((s) => s !== service);
+      } else {
+        // Altrimenti lo aggiungiamo
+        return [...prevSelectedServices, service];
+      }
+    });
+  };
+
+  // Funzione per gestire la selezione/deselezione di un counter
+  const toggleCounterSelection = (counter) => {
+    setCounters((prevSelectedCounters) => {
+      if (prevSelectedCounters.includes(counter)) {
+        // Se il counter è già selezionato, lo rimuoviamo
+        return prevSelectedCounters.filter((c) => c !== counter);
+      } else {
+        // Altrimenti lo aggiungiamo
+        return [...prevSelectedCounters, counter];
+      }
+    });
+  };
+
+  // Effetto per caricare i servizi quando il componente viene montato
+  useEffect(() => {
+    loadServices();
+  }, []);
 
   return (
     <div className="w-1/2 h-1/2 flex flex-col justify-center items-center m-auto space-y-6 p-10">
@@ -60,27 +104,39 @@ const StatisticBoard = () => {
           />
         </label>
 
-        <label>
-          Counter IDs (comma-separated):
-          <input
-            className="border p-2 ml-2"
-            type="text"
-            value={counters}
-            onChange={(e) => setCounters(e.target.value)}
-            placeholder="Optional"
-          />
-        </label>
-
-        <label>
-          Service Names (comma-separated):
-          <input
-            className="border p-2 ml-2"
-            type="text"
-            value={serviceNames}
-            onChange={(e) => setServiceNames(e.target.value)}
-            placeholder="Optional"
-          />
-        </label>
+        {/* Selezione dei counters tramite bottoni */}
+        <div>
+          <label>Counters:</label>
+          <div className="flex flex-wrap">
+            {[1, 2, 3].map((counter) => (
+              <button
+                key={counter}
+                type="button"
+                className={`p-2 m-1 border ${counters.includes(counter) ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                onClick={() => toggleCounterSelection(counter)} // Usa il counter
+              >
+                {counter}
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Selezione dei servizi tramite bottoni */}
+        <div>
+          <label>Services:</label>
+          <div className="flex flex-wrap">
+            {availableServices.map((service, index) => (
+              <button
+                key={index}
+                type="button"
+                className={`p-2 m-1 border ${selectedServices.includes(service.service_name) ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                onClick={() => toggleServiceSelection(service.service_name)} // Usa il campo `service_name`
+              >
+                {service.service_name}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
           Fetch Stats
