@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import DisplayBoard from "./DisplayBoard";
-
+import ConfigCounters from "./ConfigCounters";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -62,6 +62,7 @@ export default function MainPage() {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         Administrator
+        <ConfigCounters/>
       </CustomTabPanel>
     </Box>
   );

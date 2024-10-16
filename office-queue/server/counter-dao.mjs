@@ -3,7 +3,7 @@ import { db } from "./db.mjs";
 export class CounterDAO {
     async addService(counter_id,service_name) {
         const checkServiceQuery = 'SELECT * FROM Services WHERE service_name = ?';
-        const sqlQuery1 = 'INSERT INTO Counter (counter_id, service_name) VALUES (?, ?)';
+        const sqlQuery1 = 'INSERT OR IGNORE INTO Counter (counter_id, service_name) VALUES (?, ?)';
 
         const serviceExists = await new Promise((resolve, reject) => {
             db.get(checkServiceQuery, [service_name], (err, row) => {
