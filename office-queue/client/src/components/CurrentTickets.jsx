@@ -1,81 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-
-const mockTickets = [
-  {
-    ticket_id: "1",
-    service_name: "Shipping",
-    counter_id: "1",
-    issued_time: "2024-10-10T09:55:00",
-    status: "SERVING",
-    estimatedWaitTime: 0,
-  },
-  {
-    ticket_id: "2",
-    service_name: "Shipping",
-    counter_id: "2",
-    issued_time: "2024-10-10T09:56:00",
-    status: "SERVING",
-    estimatedWaitTime: 0,
-  },
-  {
-    ticket_id: "3",
-    service_name: "Transport",
-    counter_id: "3",
-    issued_time: "2024-10-10T09:57:00",
-    status: "SERVING",
-    estimatedWaitTime: 0,
-  },
-  {
-    ticket_id: "4",
-    service_name: "Law",
-    counter_id: "",
-    issued_time: "2024-10-10T09:57:00",
-    status: "WAITING",
-    estimatedWaitTime: 5,
-  },
-  {
-    ticket_id: "5",
-    service_name: "Law",
-    counter_id: "",
-    issued_time: "2024-10-10T09:57:00",
-    status: "WAITING",
-    estimatedWaitTime: 7,
-  },
-  {
-    ticket_id: "6",
-    service_name: "Shipping",
-    counter_id: "",
-    issued_time: "2024-10-10T09:57:00",
-    status: "WAITING",
-    estimatedWaitTime: 10,
-  },
-  {
-    ticket_id: "7",
-    service_name: "Transport",
-    counter_id: "",
-    issued_time: "2024-10-10T09:57:00",
-    status: "WAITING",
-    estimatedWaitTime: 10,
-  },
-  {
-    ticket_id: "8",
-    service_name: "Shipping",
-    counter_id: "",
-    issued_time: "2024-10-10T09:57:00",
-    status: "WAITING",
-    estimatedWaitTime: 12,
-  },
-];
-
-// Mock API function
-const fetchTickets = async () => {
-  // Fetch the tickets here
-};
+import API from "../services/API";
 
 const CurrentTickets = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [tickets, setTickets] = useState(mockTickets);
+  const [tickets, setTickets] = useState([]);
 
   // Showing the current time "HH:MM"
   useEffect(() => {
@@ -86,16 +15,16 @@ const CurrentTickets = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch tickets from the mock API
-    const timer = setInterval(() => {
-      fetchTickets().then((data) => {
-        // setTickets(data);
-        setTickets(mockTickets); // This is mock data
-      });
-    }, 1000 * 60); // fetches every minute
-    return () => clearInterval(timer);
+    const fetchAllTickets = async () => {
+      try {
+        const data = await API.fetchAllTickets();
+        setTickets(data);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchAllTickets();
   }, []);
-
   return (
     <div className="bg-slate-800 text-white px-5 py-4 font-sans rounded-md w-full ">
       <div className="flex justify-between items-center mb-4">
@@ -152,11 +81,6 @@ const CurrentTickets = () => {
                 </>
               )}
             </span>
-            {ticket.estimatedWaitTime === 0 ? (
-              <span>Now</span>
-            ) : (
-              <span>{ticket.estimatedWaitTime} min</span>
-            )}
           </div>
         ))
       )}

@@ -5,6 +5,56 @@ import evaluateWaitingTime from "./util.mjs";
 const servicesDao = new ServicesDAO();
 
 export class TicketDAO {
+
+  async getAllTickets() {
+
+    const sqlQuery0 = `
+      SELECT * FROM HistoryTickets
+      WHERE ticket_status = "pending"
+    `;
+
+    const tickets = await new Promise((resolve, reject) => {
+      db.all(sqlQuery0, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    if (tickets.length > 0) {
+      return tickets;
+    } else {
+      return [];
+    }
+  }
+
+  async getTodayTickets() {
+    const today = new Date().toISOString().split('T')[0]; 
+
+    const sqlQuery = `
+      SELECT * FROM HistoryTickets
+      WHERE DATE(issued_time) = ?
+    `;
+
+    const tickets = await new Promise((resolve, reject) => {
+      db.all(sqlQuery, [today], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    if (tickets.length > 0) {
+      return tickets;
+    } else {
+      return [];
+    }
+  }
+
   // Metodo per creare un ticket
   async createTicket(service_name) {
     const issued_time = new Date().toISOString(); //TimeStamp
@@ -28,11 +78,12 @@ export class TicketDAO {
 
     // Inserimento del ticket
     const ticket = await new Promise((resolve, reject) => {
-      db.run(sqlQuery2, [service_name, issued_time, ticket_status], (err) => {
+      db.run(sqlQuery2, [service_name, issued_time, ticket_status], function(err) {
         if (err) {
           reject(err);
         } else {
           resolve({
+            ticket_id: this.lastID,
             service_name,
             issued_time,
             ticket_status,
@@ -188,4 +239,6 @@ export class TicketDAO {
   }
 
 }
+
+
 export default TicketDAO;

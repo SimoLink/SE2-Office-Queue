@@ -66,6 +66,16 @@ app.post('/api/historyTickets/create', (req, res) => {
 
 });
 
+// GET endpoint to fetch all tickets
+app.get('/api/historyTickets/all', (req, res) => {
+  ticketDao.getAllTickets()
+    .then(tickets => res.json(tickets))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Error fetching tickets', error: err.message });
+    });
+});
+
 // GET endpoint to call the next customer in queue
 app.get('/api/nextCustomer/:counterId', (req, res) => {
 
