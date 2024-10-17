@@ -74,22 +74,22 @@ sections:
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)? 
-  We underestimated the difficulty of some task and other tasks have been added later in developement.
+ > We underestimated the difficulty of some task and other tasks have been added later in developement.
 
 - What lessons did you learn (both positive and negative) in this sprint?
-  We learned that is better to complete a user story before starting other user stories,
+ > We learned that is better to complete a user story before starting other user stories,
   also follow their order.
   We also learned that we need to organize and split task with more efficiency and write the unit tests.
 
 - Which improvement goals set in the previous retrospective were you able to achieve? 
-    /(It's our first retrospective)
+  >  /(It's our first retrospective)
   
 - Which ones you were not able to achieve? Why?
-    /(It's our first retrospective)
+   > /(It's our first retrospective)
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
   > Give more time to the planning phase of the project and write a document with the APIs.
   > Improve team coordination and comunication between members.
 
 - One thing you are proud of as a Team!!
-  Even though 17/10's presentation didn't go well, we will learn from our mistakes and remain a cohesive team.
+ > Even though 17/10's presentation didn't go well, we will learn from our mistakes and remain a cohesive team.
