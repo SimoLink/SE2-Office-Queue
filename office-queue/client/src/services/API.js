@@ -149,12 +149,6 @@ async function fetchTotalCounters() {
   return counters_N;
 }
 
-
-
-
-
-
-
 async function fetchStats(period, date, counters = "", serviceNames = ""){
   try {
     const queryParams = new URLSearchParams({
@@ -180,19 +174,34 @@ async function fetchStats(period, date, counters = "", serviceNames = ""){
   }
 };
 
+async function callNextCustomer(counter_id) {
+  const response = await fetch(SERVER_URL + `/api/nextCustomer/${counter_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Errore API callNextCustomer");
+  }
+
+  const data = await response.json();
+  return data;
+}
 
 const API = {
   fetchServices,
   getTicket,
   fetchAllTickets,
-
   addServiceToCounter,
   removeServiceFromCounter,
   fetchServicesByCounter,
   fetchCountersByService,
   fetchTotalCounters,
-
-  fetchStats
+  fetchStats,
+  callNextCustomer
 
 };
 

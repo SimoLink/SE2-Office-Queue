@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import DisplayBoard from "./DisplayBoard";
 import ConfigCounters from "./ConfigCounters";
 import StatisticBoard from "./StatisticBoard";
+import OfficerBoard from "./OfficerBoard";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,7 +62,7 @@ export default function MainPage() {
         <DisplayBoard />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Officer
+        <OfficerBoard/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <ConfigCounters/>
