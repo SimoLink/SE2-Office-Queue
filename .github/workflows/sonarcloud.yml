@@ -1,0 +1,29 @@
+name: SonarCloud analysis
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read # Allows SonarCloud to decorate PRs with analysis results
+
+jobs:
+  Analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@v2.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN2 }}  # Assicurati che SONAR_TOKEN sia salvato nei Secrets del repo
+        with:
+          args: |
+            -Dsonar.projectKey=SimoLink_SE2-Office-Queue
+            -Dsonar.organization=simolink
+          projectBaseDir: .
